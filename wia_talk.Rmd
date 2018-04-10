@@ -160,37 +160,6 @@ WorkChallenges <- multiple_choice_responses %>%
 WorkChallenges
 ```
 
-Try an initial plot. 
-
-```{r}
-ggplot(WorkChallenges, aes(x = response)) + 
-  geom_bar() + 
-  facet_wrap(~question) + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-```
-
-Reorder the graphs. 
-
-```{r}
-WorkChallenges %>%
-  mutate(response = forcats::fct_relevel(response, "Rarely", "Sometimes", "Often", "Most of the time")) %>%
-  ggplot(aes(x = response)) + 
-  geom_bar() + 
-  facet_wrap(~question) + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-```
-
-Get percentage of response for each question. 
-
-```{r}
-challenge_frequency <- WorkChallenges %>%
-  mutate(response = forcats::fct_relevel(response, "Rarely", "Sometimes", "Often", "Most of the time")) %>%
-  count(question, response) %>%
-  add_count(question, wt = n) 
-
-challenge_frequency
-```
-
 Dichotomize the variable to make one graph with data for all the questions and easily compare them. 
 
 ```{r}
@@ -251,12 +220,22 @@ ggplot(method_freq, aes(x = method, y = n, fill = n)) +
 
 ### Trelliscopejs
 
-Use trelliscopejs to create interactive facet graphs. 
+Get percentage of response for each question. 
 
+```{r}
+challenge_frequency <- WorkChallenges %>%
+  mutate(response = forcats::fct_relevel(response, "Rarely", "Sometimes", "Often", "Most of the time")) %>%
+  count(question, response) %>%
+  add_count(question, wt = n) 
+
+challenge_frequency
+```
+
+Use trelliscopejs to create interactive facet graphs. 
 ```{r}
 library(trelliscopejs)
 
-ggplot(challenge_frequency, aes(x = response, y = n/nn)) + 
+ggplot(challenge_frequency, aes(x = response, y = n/nn, group = question)) + 
   geom_line() + 
   facet_trelliscope(~question) 
 ```

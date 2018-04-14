@@ -1,0 +1,1 @@
+My talk for Facebook Women in Analytics Conference, April 2018. You can find the slides [here](https://www.slideshare.net/secret/AcaLNF6VSwtkrT) and the script I ran in my demonstration in this repo. 
